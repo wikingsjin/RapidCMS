@@ -41,8 +41,9 @@ namespace RapidCMS.Example.WebAssembly.API
                 config.RegisterRepository<Country, JsonRepository<Country>>();
                 config.RegisterRepository<TagGroup, JsonRepository<TagGroup>>();
                 config.RegisterRepository<Tag, JsonRepository<Tag>>();
-                config.RegisterRepository<MappedEntity, DatabaseEntity, MappedInMemoryRepository<MappedEntity, DatabaseEntity>>()
-                    .SetDataViewBuilder<DatabaseEntityDataViewBuilder>();
+                config.RegisterRepository<MappedEntity, DatabaseEntity, MappedInMemoryRepository<MappedEntity, DatabaseEntity>>();
+
+                config.RegisterDataViewBuilder<DatabaseEntityDataViewBuilder>("mapped");
 
                 config.RegisterFileUploadHandler<Base64TextFileUploadHandler>();
                 config.RegisterFileUploadHandler<Base64ImageUploadHandler>();

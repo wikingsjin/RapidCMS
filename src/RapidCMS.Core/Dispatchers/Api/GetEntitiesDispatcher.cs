@@ -49,7 +49,7 @@ namespace RapidCMS.Core.Dispatchers.Api
             var protoEntity = await subjectRepository.NewAsync(parent, default).ConfigureAwait(false);
 
             await _authService.EnsureAuthorizedUserAsync(request.UsageType, protoEntity).ConfigureAwait(false);
-            await _dataViewResolver.ApplyDataViewToQueryAsync(request.Query, request.RepositoryAlias).ConfigureAwait(false);
+            await _dataViewResolver.ApplyDataViewToQueryAsync(request.Query).ConfigureAwait(false);
 
             var action = (request.UsageType & ~(UsageType.List | UsageType.Root | UsageType.NotRoot)) switch
             {

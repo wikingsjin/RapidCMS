@@ -51,9 +51,12 @@ namespace RapidCMS.Core.Dispatchers.Form
             var relatedEntity = (request as GetEntitiesOfRelationRequestModel)?.Related;
 
             var protoEntity = await _concurrencyService.EnsureCorrectConcurrencyAsync(() => repository.NewAsync(parent, collection.EntityVariant.Type)).ConfigureAwait(false);
+            var newEntity = request.VariantAlias == collection.EntityVariant.Alias
+                ? protoEntity
+                : await _concurrencyService.EnsureCorrectConcurrencyAsync(() => repository.NewAsync(parent, collection.GetEntityVariant(request.VariantAlias).Type)).ConfigureAwait(false);
 
             await _authService.EnsureAuthorizedUserAsync(request.UsageType, protoEntity).ConfigureAwait(false);
-            await _dataViewResolver.ApplyDataViewToQueryAsync(request.Query, request.CollectionAlias).ConfigureAwait(false);
+            await _dataViewResolver.ApplyDataViewToQueryAsync(request.Query).ConfigureAwait(false);
 
             var action = (request.UsageType & ~(UsageType.List | UsageType.Root | UsageType.NotRoot)) switch
             {

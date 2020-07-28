@@ -20,6 +20,8 @@ namespace RapidCMS.Core.Models.ApiBridge.Request
             SearchTerm = query.SearchTerm;
             ActiveTab = query.ActiveTab;
 
+            CollectionAlias = query.CollectionAlias;
+
             OrderBys = query.ActiveOrderBys
                 .Select(x => new OrderModel
                 {

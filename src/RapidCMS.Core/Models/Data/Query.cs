@@ -56,5 +56,7 @@ namespace RapidCMS.Core.Models.Data
         public IDataView? ActiveDataView => DataView;
 
         public IEnumerable<IOrderBy> ActiveOrderBys => OrderBys ?? Enumerable.Empty<IOrderBy>();
+
+        public string? CollectionAlias { get; set; }
     }
 }
