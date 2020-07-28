@@ -47,11 +47,13 @@ namespace RapidCMS.Core.Dispatchers.Form
             var collection = _collectionResolver.ResolveSetup(request.CollectionAlias);
             var repository = _repositoryResolver.GetRepository(collection);
 
+            var requestedEntityVariantIsDefaultVariant = request.VariantAlias == collection.EntityVariant.Alias;
+
             var parent = request is GetEntitiesOfParentRequestModel parentRequest ? await _parentService.GetParentAsync(parentRequest.ParentPath).ConfigureAwait(false) : default;
             var relatedEntity = (request as GetEntitiesOfRelationRequestModel)?.Related;
 
             var protoEntity = await _concurrencyService.EnsureCorrectConcurrencyAsync(() => repository.NewAsync(parent, collection.EntityVariant.Type)).ConfigureAwait(false);
-            var newEntity = request.VariantAlias == collection.EntityVariant.Alias
+            var newEntity = requestedEntityVariantIsDefaultVariant
                 ? protoEntity
                 : await _concurrencyService.EnsureCorrectConcurrencyAsync(() => repository.NewAsync(parent, collection.GetEntityVariant(request.VariantAlias).Type)).ConfigureAwait(false);
 
@@ -74,19 +76,23 @@ namespace RapidCMS.Core.Dispatchers.Form
 
             var existingEntities = await _concurrencyService.EnsureCorrectConcurrencyAsync(action).ConfigureAwait(false);
             var protoEditContext = new EditContext(request.CollectionAlias, collection.RepositoryAlias, protoEntity, parent, request.UsageType | UsageType.List, _serviceProvider);
+            var newEditContext = requestedEntityVariantIsDefaultVariant
+                ? protoEditContext
+                : new EditContext(request.CollectionAlias, collection.RepositoryAlias, newEntity, parent, request.UsageType | UsageType.List, _serviceProvider);
 
             return new ListContext(
                 request.CollectionAlias,
                 protoEditContext,
                 parent,
                 request.UsageType,
-                ConvertEditContexts(request, protoEditContext, existingEntities),
+                ConvertEditContexts(request, protoEditContext, newEditContext, existingEntities),
                 _serviceProvider);
         }
 
         private List<EditContext> ConvertEditContexts(
             GetEntitiesRequestModel request,
             EditContext protoEditContext,
+            EditContext newEditContext,
             IEnumerable<IEntity> existingEntities)
         {
             if (request.UsageType.HasFlag(UsageType.Add))
@@ -103,7 +109,7 @@ namespace RapidCMS.Core.Dispatchers.Form
 
                 if (request.UsageType.HasFlag(UsageType.New))
                 {
-                    entities.Insert(0, new EditContext(request.CollectionAlias, protoEditContext.RepositoryAlias, protoEditContext.Entity, protoEditContext.Parent, UsageType.Node | UsageType.New, _serviceProvider));
+                    entities.Insert(0, newEditContext);
                 }
 
                 return entities;

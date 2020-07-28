@@ -21,13 +21,19 @@ namespace RapidCMS.Example.Shared.Collections
                     .SetListEditor(view =>
                     {
                         view.AddDefaultButton(DefaultButtonType.New);
+                        view.AddDefaultButton(DefaultButtonType.Return);
+
+                        view.SetColumnVisibility(EmptyVariantColumnVisibility.Visible);
 
                         view.SetPageSize(10);
 
                         view
                             .AddSection(section =>
                             {
+                                section.AddField(p => p.Id.ToString());
 
+                                section.AddField(p => p.Name)
+                                    .SetOrderByExpression(p => p.Name, OrderByType.Ascending);
                             })
                             .AddSection<EntityVariantA>(section =>
                             {
@@ -36,9 +42,10 @@ namespace RapidCMS.Example.Shared.Collections
                                 section.AddField(p => p.Name)
                                     .SetOrderByExpression(p => p.Name, OrderByType.Ascending);
 
-                                section.AddField(p => p.NameA);
+                                section.AddField(p => p.NameA1);
 
-                                section.AddDefaultButton(DefaultButtonType.Edit);
+                                section.AddDefaultButton(DefaultButtonType.SaveExisting);
+                                section.AddDefaultButton(DefaultButtonType.SaveNew);
                             });
 
                         view
@@ -49,10 +56,11 @@ namespace RapidCMS.Example.Shared.Collections
                                 section.AddField(p => p.Name)
                                     .SetOrderByExpression(p => p.Name, OrderByType.Ascending);
 
-                                section.AddField(p => p.NameA);
-                                section.AddField(p => p.NameB);
+                                section.AddField(p => p.NameB1);
+                                section.AddField(p => p.NameB2);
 
-                                section.AddDefaultButton(DefaultButtonType.Edit);
+                                section.AddDefaultButton(DefaultButtonType.SaveExisting);
+                                section.AddDefaultButton(DefaultButtonType.SaveNew);
                             });
 
                         view
@@ -63,11 +71,12 @@ namespace RapidCMS.Example.Shared.Collections
                                 section.AddField(p => p.Name)
                                     .SetOrderByExpression(p => p.Name, OrderByType.Ascending);
 
-                                section.AddField(p => p.NameA);
-                                section.AddField(p => p.NameB);
-                                section.AddField(p => p.NameC);
+                                section.AddField(p => p.NameC1);
+                                section.AddField(p => p.NameC2);
+                                section.AddField(p => p.NameC3);
 
-                                section.AddDefaultButton(DefaultButtonType.Edit);
+                                section.AddDefaultButton(DefaultButtonType.SaveExisting);
+                                section.AddDefaultButton(DefaultButtonType.SaveNew);
                             });
                     });
             });

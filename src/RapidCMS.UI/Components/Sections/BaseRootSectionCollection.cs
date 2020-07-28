@@ -105,14 +105,16 @@ namespace RapidCMS.UI.Components.Sections
                     CollectionAlias = CurrentState.CollectionAlias,
                     Query = query,
                     Related = CurrentState.Related,
-                    UsageType = CurrentState.UsageType
+                    UsageType = CurrentState.UsageType,
+                    VariantAlias = CurrentState.VariantAlias
                 }
                 : (GetEntitiesRequestModel)new GetEntitiesOfParentRequestModel
                 {
                     CollectionAlias = CurrentState.CollectionAlias,
                     ParentPath = CurrentState.ParentPath,
                     Query = query,
-                    UsageType = CurrentState.UsageType
+                    UsageType = CurrentState.UsageType,
+                    VariantAlias = CurrentState.VariantAlias
                 };
 
             var listContext = await PresentationService.GetEntitiesAsync<GetEntitiesRequestModel, ListContext>(request);

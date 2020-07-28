@@ -21,22 +21,22 @@ namespace RapidCMS.Example.Shared.Data
                 {
                     Id = a.Id,
                     Name = a.Name,
-                    NameA = a.NameA
+                    NameA1 = a.NameA1
                 },
                 EntityVariantB b => new EntityVariantB
                 {
                     Id = b.Id,
                     Name = b.Name,
-                    NameA = b.NameA,
-                    NameB = b.NameB
+                    NameB1 = b.NameB1,
+                    NameB2 = b.NameB2
                 },
                 EntityVariantC c => new EntityVariantC
                 {
                     Id = c.Id,
                     Name = c.Name,
-                    NameA = c.NameA,
-                    NameB = c.NameB,
-                    NameC = c.NameC
+                    NameC1 = c.NameC1,
+                    NameC2 = c.NameC2,
+                    NameC3 = c.NameC3
                 }
             };
         }
@@ -44,19 +44,19 @@ namespace RapidCMS.Example.Shared.Data
 
     public class EntityVariantA : EntityVariantBase
     {
-        public string? NameA { get; set; }
+        public string? NameA1 { get; set; }
     }
 
     public class EntityVariantB : EntityVariantBase
     {
-        public string? NameA { get; set; }
-        public string? NameB { get; set; }
+        public string? NameB1 { get; set; }
+        public string? NameB2 { get; set; }
     }
 
     public class EntityVariantC : EntityVariantBase
     {
-        public string? NameA { get; set; }
-        public string? NameB { get; set; }
-        public string? NameC { get; set; }
+        public string? NameC1 { get; set; }
+        public string? NameC2 { get; set; }
+        public string? NameC3 { get; set; }
     }
 }
