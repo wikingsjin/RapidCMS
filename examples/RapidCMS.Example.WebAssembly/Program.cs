@@ -33,6 +33,7 @@ namespace RapidCMS.Example.WebAssembly
             builder.Services.AddRapidCMSApiRepository<BaseRepository<Country>, ApiRepository<Country, JsonRepository<Country>>>(_baseUri);
             builder.Services.AddRapidCMSApiRepository<BaseRepository<TagGroup>, ApiRepository<TagGroup, JsonRepository<TagGroup>>>(_baseUri);
             builder.Services.AddRapidCMSApiRepository<BaseRepository<Tag>, ApiRepository<Tag, JsonRepository<Tag>>>(_baseUri);
+            builder.Services.AddRapidCMSApiRepository<BaseRepository<EntityVariantBase>, ApiRepository<EntityVariantBase, JsonRepository<EntityVariantBase>>>(_baseUri);
 
             // with LocalStorageRepository collections can store their data in the local storage of
             // the user, making personalisation quite easy
@@ -57,23 +58,25 @@ namespace RapidCMS.Example.WebAssembly
                 
                 config.SetCustomLoginStatus(typeof(LoginStatus));
 
-                config.AddPersonCollection();
+                //config.AddPersonCollection();
 
-                config.AddCountryCollection();
+                //config.AddCountryCollection();
 
-                config.AddPage("beaker", "Some random page", config =>
-                {
-                    config.AddSection(typeof(CustomSection));
-                    config.AddSection("country", edit: false);
-                });
+                //config.AddPage("beaker", "Some random page", config =>
+                //{
+                //    config.AddSection(typeof(CustomSection));
+                //    config.AddSection("country", edit: false);
+                //});
 
-                config.AddUserCollection();
+                //config.AddUserCollection();
 
-                config.AddTagCollection();
+                //config.AddTagCollection();
 
-                config.AddMappedCollection();
+                //config.AddMappedCollection();
 
-                config.AddConventionCollection();
+                //config.AddConventionCollection();
+
+                config.AddEntityVariantCollection();
 
                 config.Dashboard.AddSection(typeof(DashboardSection));
                 config.Dashboard.AddSection("user", edit: true);

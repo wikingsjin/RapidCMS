@@ -143,7 +143,8 @@ namespace RapidCMS.Repositories.ApiBridge
             {
                 var response = await DoRequestAsync(request).ConfigureAwait(false);
                 var json = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                return JsonConvert.DeserializeObject<TResult>(json);
+                var result = JsonConvert.DeserializeObject<TResult>(json);
+                return result;
             }
             catch (NotFoundException)
             {

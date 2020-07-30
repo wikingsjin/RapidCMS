@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using RapidCMS.Core.Abstractions.Data;
+using RapidCMS.Core.Helpers;
 
 namespace RapidCMS.Core.Models.ApiBridge.Request
 {
@@ -33,12 +34,12 @@ namespace RapidCMS.Core.Models.ApiBridge.Request
 
         public ParentQueryModel(IParent? parent, Type? variantType) : this(parent)
         {
-            VariantTypeName = variantType?.AssemblyQualifiedName;
+            VariantAlias = variantType == null ? null : AliasHelper.GetEntityVariantAlias(variantType);
         }
 
         public ParentQueryModel(IParent? parent, Type? variantType, IQuery query) : this(parent, query)
         {
-            VariantTypeName = variantType?.AssemblyQualifiedName;
+            VariantAlias = variantType == null ? null : AliasHelper.GetEntityVariantAlias(variantType);
         }
 
         public string? ParentPath { get; set; }

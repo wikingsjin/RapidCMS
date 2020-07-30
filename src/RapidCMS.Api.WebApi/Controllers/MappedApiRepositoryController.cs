@@ -177,7 +177,7 @@ namespace RapidCMS.Api.WebApi.Controllers
                     {
                         RepositoryAlias = RepositoryAlias,
                         ParentPath = query.ParentPath,
-                        VariantAlias = query.VariantTypeName
+                        VariantAlias = query.VariantAlias
                     },
                     UsageType = UsageType.Node | UsageType.New
                 }).ConfigureAwait(false);

@@ -15,8 +15,7 @@ namespace RapidCMS.Core.Models.ApiBridge.Request
 
         public int? ActiveTab { get; set; }
 
-        // TODO: protect this variable more
-        public string? VariantTypeName { get; set; }
+        public string? VariantAlias { get; set; }
 
         public string? CollectionAlias { get; set; }
 

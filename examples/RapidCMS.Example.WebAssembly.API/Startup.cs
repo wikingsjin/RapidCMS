@@ -27,6 +27,7 @@ namespace RapidCMS.Example.WebAssembly.API
             services.AddScoped<JsonRepository<User>>();
             services.AddScoped<JsonRepository<TagGroup>>();
             services.AddScoped<JsonRepository<Tag>>();
+            services.AddScoped<JsonRepository<EntityVariantBase>>();
             services.AddSingleton<MappedInMemoryRepository<MappedEntity, DatabaseEntity>>();
             services.AddSingleton<IConverter<MappedEntity, DatabaseEntity>, Mapper>();
             services.AddSingleton<DatabaseEntityDataViewBuilder>();
@@ -41,6 +42,7 @@ namespace RapidCMS.Example.WebAssembly.API
                 config.RegisterRepository<Country, JsonRepository<Country>>();
                 config.RegisterRepository<TagGroup, JsonRepository<TagGroup>>();
                 config.RegisterRepository<Tag, JsonRepository<Tag>>();
+                config.RegisterRepository<EntityVariantBase, JsonRepository<EntityVariantBase>>();
                 config.RegisterRepository<MappedEntity, DatabaseEntity, MappedInMemoryRepository<MappedEntity, DatabaseEntity>>();
 
                 config.RegisterDataViewBuilder<DatabaseEntityDataViewBuilder>("mapped");

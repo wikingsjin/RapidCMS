@@ -60,7 +60,7 @@ namespace RapidCMS.Core.Dispatchers.Form
                 UsageType.New => () => repository.NewAsync(parent, variant.Type)!,
 
                 _ => default(Func<Task<IEntity?>>)
-            };
+            }; 
 
             if (action == default)
             {
