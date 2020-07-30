@@ -48,6 +48,7 @@ namespace RapidCMS.Core.Dispatchers.Form
             }
 
             var collection = _collectionResolver.ResolveSetup(request.CollectionAlias);
+            var variant = collection.GetEntityVariant(request.VariantAlias);
             var repository = _repositoryResolver.GetRepository(collection);
             
             var parent = await _parentService.GetParentAsync(request.ParentPath).ConfigureAwait(false);
@@ -56,7 +57,7 @@ namespace RapidCMS.Core.Dispatchers.Form
             {
                 UsageType.View => () => repository.GetByIdAsync(request.Id!, parent),
                 UsageType.Edit => () => repository.GetByIdAsync(request.Id!, parent),
-                UsageType.New => () => repository.NewAsync(parent, collection.GetEntityVariant(request.VariantAlias).Type)!,
+                UsageType.New => () => repository.NewAsync(parent, variant.Type)!,
 
                 _ => default(Func<Task<IEntity?>>)
             };
@@ -74,7 +75,7 @@ namespace RapidCMS.Core.Dispatchers.Form
 
             await _authService.EnsureAuthorizedUserAsync(request.UsageType, entity).ConfigureAwait(false);
 
-            return new EditContext(request.CollectionAlias, collection.RepositoryAlias, entity, parent, request.UsageType | UsageType.Node, _serviceProvider);
+            return new EditContext(request.CollectionAlias, collection.RepositoryAlias, request.VariantAlias, entity, parent, request.UsageType | UsageType.Node, _serviceProvider);
         }
     }
 }

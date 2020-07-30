@@ -20,7 +20,7 @@ namespace RapidCMS.Example.Shared.Collections
                     .AddEntityVariant<EntityVariantC>("Variant C", "c")
                     .SetListEditor(view =>
                     {
-                        view.AddDefaultButton(DefaultButtonType.New);
+                        view.AddDefaultButton(DefaultButtonType.New, label: "New {0}");
                         view.AddDefaultButton(DefaultButtonType.Return);
 
                         view.SetColumnVisibility(EmptyVariantColumnVisibility.Visible);
@@ -30,14 +30,14 @@ namespace RapidCMS.Example.Shared.Collections
                         view
                             .AddSection(section =>
                             {
-                                section.AddField(p => p.Id.ToString());
+                                section.AddField(p => p.Id);
 
                                 section.AddField(p => p.Name)
                                     .SetOrderByExpression(p => p.Name, OrderByType.Ascending);
                             })
                             .AddSection<EntityVariantA>(section =>
                             {
-                                section.AddField(p => p.Id.ToString());
+                                section.AddField(p => p.Id);
 
                                 section.AddField(p => p.Name)
                                     .SetOrderByExpression(p => p.Name, OrderByType.Ascending);
@@ -46,12 +46,13 @@ namespace RapidCMS.Example.Shared.Collections
 
                                 section.AddDefaultButton(DefaultButtonType.SaveExisting);
                                 section.AddDefaultButton(DefaultButtonType.SaveNew);
+                                section.AddDefaultButton(DefaultButtonType.Edit);
                             });
 
                         view
                             .AddSection<EntityVariantB>(section =>
                             {
-                                section.AddField(p => p.Id.ToString());
+                                section.AddField(p => p.Id);
 
                                 section.AddField(p => p.Name)
                                     .SetOrderByExpression(p => p.Name, OrderByType.Ascending);
@@ -61,12 +62,13 @@ namespace RapidCMS.Example.Shared.Collections
 
                                 section.AddDefaultButton(DefaultButtonType.SaveExisting);
                                 section.AddDefaultButton(DefaultButtonType.SaveNew);
+                                section.AddDefaultButton(DefaultButtonType.Edit);
                             });
 
                         view
                             .AddSection<EntityVariantC>(section =>
                             {
-                                section.AddField(p => p.Id.ToString());
+                                section.AddField(p => p.Id);
 
                                 section.AddField(p => p.Name)
                                     .SetOrderByExpression(p => p.Name, OrderByType.Ascending);
@@ -77,7 +79,45 @@ namespace RapidCMS.Example.Shared.Collections
 
                                 section.AddDefaultButton(DefaultButtonType.SaveExisting);
                                 section.AddDefaultButton(DefaultButtonType.SaveNew);
+                                section.AddDefaultButton(DefaultButtonType.Edit);
                             });
+                    })
+                    .SetNodeEditor(editor =>
+                    {
+                        editor.AddDefaultButton(DefaultButtonType.Up);
+                        editor.AddDefaultButton(DefaultButtonType.SaveExisting);
+
+                        editor.AddSection(generic =>
+                        {
+                            generic.SetLabel("Generics");
+
+                            generic.AddField(x => x.Id).SetType(DisplayType.Pre);
+                            generic.AddField(x => x.Name);
+                        });
+
+                        editor.AddSection<EntityVariantA>(a =>
+                        {
+                            a.SetLabel("Variant A specifics");
+
+                            a.AddField(x => x.NameA1);
+                        });
+
+                        editor.AddSection<EntityVariantB>(b =>
+                        {
+                            b.SetLabel("Variant B specifics");
+
+                            b.AddField(x => x.NameB1);
+                            b.AddField(x => x.NameB2);
+                        });
+
+                        editor.AddSection<EntityVariantC>(c =>
+                        {
+                            c.SetLabel("Variant C specifics");
+
+                            c.AddField(x => x.NameC1);
+                            c.AddField(x => x.NameC2);
+                            c.AddField(x => x.NameC3);
+                        });
                     });
             });
         }

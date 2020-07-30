@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Primitives;
@@ -127,7 +128,7 @@ namespace RapidCMS.Core.Repositories
 
         public IChangeToken ChangeToken => _repositoryChangeToken;
 
-        protected internal void NotifyUpdate()
+        protected void NotifyUpdate()
         {
             var currentToken = _repositoryChangeToken;
             _repositoryChangeToken = new CmsChangeToken();

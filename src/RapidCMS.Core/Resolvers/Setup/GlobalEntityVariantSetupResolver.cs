@@ -1,6 +1,7 @@
 ﻿using System;
 using RapidCMS.Core.Abstractions.Resolvers;
 using RapidCMS.Core.Abstractions.Setup;
+using RapidCMS.Core.Extensions;
 using RapidCMS.Core.Models.Setup;
 
 namespace RapidCMS.Core.Resolvers.Setup
@@ -14,7 +15,7 @@ namespace RapidCMS.Core.Resolvers.Setup
 
         public IEntityVariantSetup ResolveSetup(string alias)
         {
-            var type = Type.GetType(alias);
+            var type = Type.GetType(alias.FromBase64String());
             if (type == null)
             {
                 throw new InvalidOperationException($"Cannot find type with alias {alias}.");

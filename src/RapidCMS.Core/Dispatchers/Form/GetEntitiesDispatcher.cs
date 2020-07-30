@@ -45,9 +45,10 @@ namespace RapidCMS.Core.Dispatchers.Form
         public async Task<ListContext> GetAsync(GetEntitiesRequestModel request)
         {
             var collection = _collectionResolver.ResolveSetup(request.CollectionAlias);
+            var variant = collection.GetEntityVariant(request.VariantAlias);
             var repository = _repositoryResolver.GetRepository(collection);
 
-            var requestedEntityVariantIsDefaultVariant = request.VariantAlias == collection.EntityVariant.Alias;
+            var requestedEntityVariantIsDefaultVariant = variant.Alias == collection.EntityVariant.Alias;
 
             var parent = request is GetEntitiesOfParentRequestModel parentRequest ? await _parentService.GetParentAsync(parentRequest.ParentPath).ConfigureAwait(false) : default;
             var relatedEntity = (request as GetEntitiesOfRelationRequestModel)?.Related;
@@ -55,7 +56,7 @@ namespace RapidCMS.Core.Dispatchers.Form
             var protoEntity = await _concurrencyService.EnsureCorrectConcurrencyAsync(() => repository.NewAsync(parent, collection.EntityVariant.Type)).ConfigureAwait(false);
             var newEntity = requestedEntityVariantIsDefaultVariant
                 ? protoEntity
-                : await _concurrencyService.EnsureCorrectConcurrencyAsync(() => repository.NewAsync(parent, collection.GetEntityVariant(request.VariantAlias).Type)).ConfigureAwait(false);
+                : await _concurrencyService.EnsureCorrectConcurrencyAsync(() => repository.NewAsync(parent, variant.Type)).ConfigureAwait(false);
 
             await _authService.EnsureAuthorizedUserAsync(request.UsageType, protoEntity).ConfigureAwait(false);
             await _dataViewResolver.ApplyDataViewToQueryAsync(request.Query).ConfigureAwait(false);
@@ -75,10 +76,10 @@ namespace RapidCMS.Core.Dispatchers.Form
             }
 
             var existingEntities = await _concurrencyService.EnsureCorrectConcurrencyAsync(action).ConfigureAwait(false);
-            var protoEditContext = new EditContext(request.CollectionAlias, collection.RepositoryAlias, protoEntity, parent, request.UsageType | UsageType.List, _serviceProvider);
+            var protoEditContext = new EditContext(request.CollectionAlias, collection.RepositoryAlias, collection.EntityVariant.Alias, protoEntity, parent, request.UsageType | UsageType.List, _serviceProvider);
             var newEditContext = requestedEntityVariantIsDefaultVariant
                 ? protoEditContext
-                : new EditContext(request.CollectionAlias, collection.RepositoryAlias, newEntity, parent, request.UsageType | UsageType.List, _serviceProvider);
+                : new EditContext(request.CollectionAlias, collection.RepositoryAlias, variant.Alias, newEntity, parent, request.UsageType | UsageType.List, _serviceProvider);
 
             return new ListContext(
                 request.CollectionAlias,
@@ -98,13 +99,13 @@ namespace RapidCMS.Core.Dispatchers.Form
             if (request.UsageType.HasFlag(UsageType.Add))
             {
                 return existingEntities
-                    .Select(ent => new EditContext(request.CollectionAlias, protoEditContext.RepositoryAlias, ent, protoEditContext.Parent, UsageType.Node | UsageType.Pick, _serviceProvider))
+                    .Select(ent => new EditContext(protoEditContext, ent, UsageType.Node | UsageType.Pick, _serviceProvider))
                     .ToList();
             }
             else if (request.UsageType.HasFlag(UsageType.Edit) || request.UsageType.HasFlag(UsageType.New))
             {
                 var entities = existingEntities
-                    .Select(ent => new EditContext(request.CollectionAlias, protoEditContext.RepositoryAlias, ent, protoEditContext.Parent, UsageType.Node | UsageType.Edit, _serviceProvider))
+                    .Select(ent => new EditContext(protoEditContext, ent, UsageType.Node | UsageType.Edit, _serviceProvider))
                     .ToList();
 
                 if (request.UsageType.HasFlag(UsageType.New))
@@ -117,7 +118,7 @@ namespace RapidCMS.Core.Dispatchers.Form
             else if (request.UsageType.HasFlag(UsageType.View))
             {
                 return existingEntities
-                    .Select(ent => new EditContext(request.CollectionAlias, protoEditContext.RepositoryAlias, ent, protoEditContext.Parent, UsageType.Node | UsageType.View, _serviceProvider))
+                    .Select(ent => new EditContext(protoEditContext, ent, UsageType.Node | UsageType.View, _serviceProvider))
                     .ToList();
             }
             else
