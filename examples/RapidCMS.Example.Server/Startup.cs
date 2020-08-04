@@ -1,15 +1,16 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using RapidCMS.Example.Shared.Components;
+using RapidCMS.Core.Repositories;
 using RapidCMS.Example.Shared.Collections;
+using RapidCMS.Example.Shared.Components;
 using RapidCMS.Example.Shared.Data;
 using RapidCMS.Example.Shared.DataViews;
 using RapidCMS.Example.Shared.Handlers;
 using RapidCMS.Repositories;
-using RapidCMS.Core.Repositories;
 
 namespace RapidCMS.Example.Server
 {
@@ -38,6 +39,7 @@ namespace RapidCMS.Example.Server
             services.AddSingleton<BaseRepository<TagGroup>, JsonRepository<TagGroup>>();
             services.AddSingleton<BaseRepository<Tag>, JsonRepository<Tag>>();
             services.AddSingleton<BaseRepository<EntityVariantBase>, InMemoryRepository<EntityVariantBase>>();
+            services.AddSingleton<BaseRepository<Counter>, CounterRepository>();
 
             services.AddSingleton<BaseMappedRepository<MappedEntity, DatabaseEntity>, MappedInMemoryRepository<MappedEntity, DatabaseEntity>>();
             services.AddSingleton<IConverter<MappedEntity, DatabaseEntity>, Mapper>();
@@ -85,8 +87,11 @@ namespace RapidCMS.Example.Server
                 // CRUD editor based on conventions for even more rapid development
                 config.AddConventionCollection();
 
-                // CRUD
+                // CRUD editor with entity variants, so multiple types of entities can be mixed in a single collection
                 config.AddEntityVariantCollection();
+
+                // CRUD editor displaying live data, an external process updates the data every second
+                config.AddActiveCollection();
 
                 // the dashboard can be build up of custom Blazor components, or the ListViews or ListEditors of collections
                 config.Dashboard.AddSection(typeof(DashboardSection));

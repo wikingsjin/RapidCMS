@@ -21,29 +21,36 @@ namespace RapidCMS.Example.WebAssembly
 
         public static async Task Main(string[] args)
         {
-            // TODO: add comments like the ServerSide project
-
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<App>("app");
 
             builder.Services.AddAuthorizationCore();
 
+            // it's not required to add your repositories under the base repository
+            // but this allows the Server and the WebAssembly examples to share the collection configuration
+            // futhtermore, the AddRapidCMSApiRepository allows you to add ApiRepositories which are lined up with a correct HttpClient to 
+            // work seamlessly with a repository on the API side of things (See RapidCMS.Example.WebAssembly.API)
             builder.Services.AddRapidCMSApiRepository<BaseRepository<Person>, ApiRepository<Person, JsonRepository<Person>>>(_baseUri);
             builder.Services.AddRapidCMSApiRepository<BaseRepository<ConventionalPerson>, ApiRepository<ConventionalPerson, JsonRepository<ConventionalPerson>>>(_baseUri);
             builder.Services.AddRapidCMSApiRepository<BaseRepository<Country>, ApiRepository<Country, JsonRepository<Country>>>(_baseUri);
             builder.Services.AddRapidCMSApiRepository<BaseRepository<TagGroup>, ApiRepository<TagGroup, JsonRepository<TagGroup>>>(_baseUri);
             builder.Services.AddRapidCMSApiRepository<BaseRepository<Tag>, ApiRepository<Tag, JsonRepository<Tag>>>(_baseUri);
-            builder.Services.AddRapidCMSApiRepository<BaseRepository<EntityVariantBase>, ApiRepository<EntityVariantBase, JsonRepository<EntityVariantBase>>>(_baseUri);
 
             // with LocalStorageRepository collections can store their data in the local storage of
             // the user, making personalisation quite easy
             builder.Services.AddBlazoredLocalStorage();
             builder.Services.AddScoped<BaseRepository<User>, LocalStorageRepository<User>>();
 
+            // entity variants are not supported in Api Contexts, so this repository is added as a local storage repository
+            builder.Services.AddScoped<BaseRepository<EntityVariantBase>, LocalStorageRepository<EntityVariantBase>>();
+
+            // api repositories can also be mapped
             builder.Services.AddRapidCMSApiRepository<
                 BaseMappedRepository<MappedEntity, DatabaseEntity>,
                 ApiMappedRepository<MappedEntity, DatabaseEntity, MappedInMemoryRepository<MappedEntity, DatabaseEntity>>>(_baseUri);
             builder.Services.AddSingleton<DatabaseEntityDataViewBuilder>();
+
+            builder.Services.AddSingleton<BaseRepository<Counter>, CounterRepository>();
 
             builder.Services.AddSingleton<RandomNameActionHandler>();
 
@@ -58,25 +65,40 @@ namespace RapidCMS.Example.WebAssembly
                 
                 config.SetCustomLoginStatus(typeof(LoginStatus));
 
-                //config.AddPersonCollection();
+                // CRUD editor for simple POCO with recursive sub collections
+                // --> see Collections/PersonCollection for the basics of this CMS
+                config.AddPersonCollection();
 
-                //config.AddCountryCollection();
+                // CRUD editor with support for one-to-many relation + validation
+                // --> see Collections/CountryCollection for one-to-many relation with validation
+                config.AddCountryCollection();
 
-                //config.AddPage("beaker", "Some random page", config =>
-                //{
-                //    config.AddSection(typeof(CustomSection));
-                //    config.AddSection("country", edit: false);
-                //});
+                // Custom page with either custom Blazor components, or ListViews or ListEditors of collections
+                config.AddPage("beaker", "Some random page", config =>
+                {
+                    config.AddSection(typeof(CustomSection));
+                    config.AddSection("country", edit: false);
+                });
 
-                //config.AddUserCollection();
+                // CRUD editor with validation attributes, custom editor and custom button panes
+                // --> see Collections/UserCollection 
+                config.AddUserCollection();
 
-                //config.AddTagCollection();
+                // CRUD editor with nested collection
+                // --> see Collections/TagCollection
+                config.AddTagCollection();
 
-                //config.AddMappedCollection();
+                // CRUD editor with entity mapping
+                config.AddMappedCollection();
 
-                //config.AddConventionCollection();
+                // CRUD editor based on conventions for even more rapid development
+                config.AddConventionCollection();
 
+                // CRUD editor with entity variants, so multiple types of entities can be mixed in a single collection
                 config.AddEntityVariantCollection();
+
+                // CRUD editor displaying live data, an external process updates the data every second
+                config.AddActiveCollection();
 
                 config.Dashboard.AddSection(typeof(DashboardSection));
                 config.Dashboard.AddSection("user", edit: true);

@@ -29,7 +29,7 @@ namespace RapidCMS.Repositories
             _serviceProvider = serviceProvider;
         }
 
-        private List<TEntity> GetListForParent(IParent? parent)
+        protected List<TEntity> GetListForParent(IParent? parent)
         {
             var pId = parent?.Entity.Id ?? string.Empty;
 

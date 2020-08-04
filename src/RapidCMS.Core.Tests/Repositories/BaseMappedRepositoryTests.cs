@@ -8,16 +8,16 @@ using System;
 
 namespace RapidCMS.Core.Tests.Repositories
 {
-    public class BaseRepositoryTests
+    public class BaseMappedRepositoryTests
     {
         private IRepository _subject = default!;
         private Mock<IServiceProvider> _serviceProvider = default!;
-        private Mock<BaseRepository<Entity>> _mock = default!;
+        private Mock<BaseMappedRepository<Entity, Entity>> _mock = default!;
 
         [SetUp]
         public void Setup()
         {
-            _mock = new Mock<BaseRepository<Entity>>();
+            _mock = new Mock<BaseMappedRepository<Entity, Entity>>();
             _serviceProvider = new Mock<IServiceProvider>();
             _subject = _mock.Object;
         }

@@ -128,7 +128,7 @@ namespace RapidCMS.Core.Repositories
 
         public IChangeToken ChangeToken => _repositoryChangeToken;
 
-        protected void NotifyUpdate()
+        public void NotifyUpdate()
         {
             var currentToken = _repositoryChangeToken;
             _repositoryChangeToken = new CmsChangeToken();

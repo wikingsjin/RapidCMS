@@ -21,6 +21,7 @@ namespace RapidCMS.Example.WebAssembly.API
 
         public void ConfigureServices(IServiceCollection services)
         {
+            // first, add the repositories to the DI
             services.AddScoped<JsonRepository<Person>>();
             services.AddScoped<JsonRepository<ConventionalPerson>>();
             services.AddScoped<JsonRepository<Country>>();
@@ -37,6 +38,7 @@ namespace RapidCMS.Example.WebAssembly.API
 
             services.AddRapidCMSApi(config =>
             {
+                // then register the repositories to RapidCMS API, so it can create controllers for them
                 config.RegisterRepository<Person, JsonRepository<Person>>();
                 config.RegisterRepository<ConventionalPerson, JsonRepository<ConventionalPerson>>();
                 config.RegisterRepository<Country, JsonRepository<Country>>();
@@ -45,6 +47,8 @@ namespace RapidCMS.Example.WebAssembly.API
                 config.RegisterRepository<EntityVariantBase, JsonRepository<EntityVariantBase>>();
                 config.RegisterRepository<MappedEntity, DatabaseEntity, MappedInMemoryRepository<MappedEntity, DatabaseEntity>>();
 
+                // if collections use data view builders, they can also be backed by an API
+                // if a collection uses a ApiRepository, then it's data view builder must also be API backed
                 config.RegisterDataViewBuilder<DatabaseEntityDataViewBuilder>("mapped");
 
                 config.RegisterFileUploadHandler<Base64TextFileUploadHandler>();
