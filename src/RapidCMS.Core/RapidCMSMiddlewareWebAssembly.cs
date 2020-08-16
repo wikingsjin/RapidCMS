@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading;
-using Blazor.FileReader;
+using Tewr.Blazor.FileReader;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using RapidCMS.Core.Abstractions.Config;
