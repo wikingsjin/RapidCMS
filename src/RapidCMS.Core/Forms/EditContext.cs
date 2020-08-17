@@ -58,7 +58,7 @@ namespace RapidCMS.Core.Forms
         internal string? ReorderedBeforeId { get; private set; }
         public EntityState EntityState => UsageType.HasFlag(UsageType.New) ? EntityState.IsNew : EntityState.IsExisting;
 
-        internal List<DataProvider> DataProviders = new List<DataProvider>();
+        internal List<FormDataProvider> DataProviders { get; set; } = new List<FormDataProvider>();
 
         public event EventHandler<FieldChangedEventArgs>? OnFieldChanged;
 
@@ -146,14 +146,14 @@ namespace RapidCMS.Core.Forms
 
         private void ValidateModel()
         {
-            FormState.ValidateModel();
+            FormState.ValidateModel(DataProviders);
 
             OnValidationStateChanged?.Invoke(this, new ValidationStateChangedEventArgs(isValid: !FormState.GetValidationMessages().Any()));
         }
 
         private void ValidateProperty(IPropertyMetadata property)
         {
-            FormState.ValidateProperty(property);
+            FormState.ValidateProperty(property, DataProviders);
 
             OnValidationStateChanged?.Invoke(this, new ValidationStateChangedEventArgs(isValid: !FormState.GetValidationMessages().Any()));
         }

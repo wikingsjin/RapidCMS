@@ -5,7 +5,6 @@ using RapidCMS.Core.Forms;
 
 namespace RapidCMS.Core.Abstractions.Data
 {
-    // TODO: paginate, search etc
     public interface IDataCollection
     {
         /// <summary>

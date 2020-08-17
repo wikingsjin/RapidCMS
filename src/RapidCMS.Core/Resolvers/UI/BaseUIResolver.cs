@@ -85,7 +85,7 @@ namespace RapidCMS.Core.Resolvers.UI
             };
         }
 
-        protected FieldUI GetField(FieldSetup field, DataProvider? dataProvider)
+        protected FieldUI GetField(FieldSetup field, FormDataProvider? dataProvider)
         {
             return field switch
             {

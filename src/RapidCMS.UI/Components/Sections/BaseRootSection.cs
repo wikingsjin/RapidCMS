@@ -70,7 +70,6 @@ namespace RapidCMS.UI.Components.Sections
                 Tabs = null;
                 UIResolver = null;
                 ListUI = null;
-                EditContext = null;
                 PageContents = null;
 
                 PageState.ResetState(InitialState);
