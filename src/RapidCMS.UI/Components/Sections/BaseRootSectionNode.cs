@@ -16,7 +16,7 @@ namespace RapidCMS.UI.Components.Sections
                 throw new InvalidOperationException();
             }
 
-            var editContext = await PresentationService.GetEntityAsync<GetEntityRequestModel, EditContext>(new GetEntityRequestModel
+            var editContext = await PresentationService.GetEntityAsync<GetEntityRequestModel, FormEditContext>(new GetEntityRequestModel
             {
                 CollectionAlias = CurrentState.CollectionAlias,
                 Id = CurrentState.Id,

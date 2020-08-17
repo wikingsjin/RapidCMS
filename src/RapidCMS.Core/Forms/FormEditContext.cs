@@ -8,9 +8,9 @@ using RapidCMS.Core.Providers;
 
 namespace RapidCMS.Core.Forms
 {
-    public sealed class EditContext
+    public sealed class FormEditContext
     {
-        internal EditContext(
+        internal FormEditContext(
             string collectionAlias,
             string repositoryAlias,
             string entityVariantAlias,
@@ -29,8 +29,8 @@ namespace RapidCMS.Core.Forms
             FormState = new FormState(Entity, serviceProvider);
         }
 
-        internal EditContext(
-            EditContext protoEditContext,
+        internal FormEditContext(
+            FormEditContext protoEditContext,
             IEntity entity,
             UsageType usageType,
             IServiceProvider serviceProvider)
